@@ -1,0 +1,5 @@
+body { font-family: system-ui, sans-serif; background: #f2f4f8; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+.caja { background: #fff; padding: 2rem; border-radius: 10px; width: 320px; box-shadow: 0 4px 16px rgba(0,0,0,.1); }
+.caja input { width: 100%; padding: .7rem; margin-bottom: .8rem; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+.caja button { width: 100%; padding: .7rem; background: #2563eb; color: #fff; border: 0; border-radius: 6px; cursor: pointer; }
+.error { color: #b91c1c; } .ok { color: #15803d; }
