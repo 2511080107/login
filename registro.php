@@ -1,5 +1,6 @@
 <?php
 require 'db.php';
+require 'google_config.php';
 $mensaje = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -32,6 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Registro</title>
     <link rel="stylesheet" href="estilos.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
 <form method="post" class="caja">
@@ -41,7 +43,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <input type="email" name="email" placeholder="Correo" required>
     <input type="password" name="password" placeholder="Contraseña" required>
     <button type="submit">Registrarme</button>
+
+    <div class="divisor">o</div>
+
+    <div id="google-btn">
+        <div id="g_id_onload"
+             data-client_id="<?= htmlspecialchars(GOOGLE_CLIENT_ID) ?>"
+             data-callback="handleGoogleCredential"
+             data-auto_prompt="false"></div>
+        <div class="g_id_signin"
+             data-type="standard"
+             data-size="large"
+             data-theme="outline"
+             data-text="signup_with"
+             data-shape="rectangular"
+             data-logo_alignment="left"></div>
+    </div>
+
     <p><a href="login.php">¿Ya tienes cuenta? Inicia sesión</a></p>
 </form>
+
+<script>
+function handleGoogleCredential(response) {
+    const form = new FormData();
+    form.append('credential', response.credential);
+
+    fetch('google_login.php', { method: 'POST', body: form })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+            if (data.ok) {
+                window.location.href = data.redirect || 'panel.php';
+            } else {
+                alert(data.error || 'No se pudo registrar con Google.');
+            }
+        })
+        .catch(function () {
+            alert('Error de conexión con el servidor.');
+        });
+}
+</script>
 </body>
 </html>

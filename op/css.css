@@ -776,3 +776,241 @@ body.dark #content nav .profile-menu li a {
 		min-width: 420px;
 	}
 }
+
+
+
+
+/* =====================================================
+   ASISTENCIA / CRUD (integrado al estilo del panel)
+   ===================================================== */
+
+/* Tarjetas de resumen con semántica de color */
+#content main .box-info.asistencia-stats li:nth-child(1) .bx {
+	background: var(--light-yellow);
+	color: var(--yellow);
+}
+#content main .box-info.asistencia-stats li:nth-child(2) .bx {
+	background: var(--light-blue);
+	color: var(--blue);
+}
+#content main .box-info.asistencia-stats li:nth-child(3) .bx {
+	background: var(--light-orange);
+	color: var(--red);
+}
+
+/* Encabezado de la tarjeta */
+#content main .table-data .order .head .badge-total {
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--blue);
+	background: var(--light-blue);
+	padding: 7px 16px;
+	border-radius: 36px;
+	white-space: nowrap;
+	font-family: var(--lato);
+}
+
+/* Mensajes de estado */
+#content main .alerta {
+	padding: 14px 18px;
+	border-radius: 14px;
+	margin-bottom: 20px;
+	font-size: 14px;
+	font-weight: 500;
+	font-family: var(--lato);
+}
+.alerta-ok {
+	background: var(--light-blue);
+	color: var(--blue);
+}
+.alerta-error {
+	background: var(--light-orange);
+	color: var(--red);
+}
+
+/* Formulario de alta / edición */
+#content main .table-data .order .form-asistencia {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	grid-gap: 12px;
+	margin-bottom: 26px;
+	padding: 20px;
+	background: var(--grey);
+	border-radius: 16px;
+}
+#content main .table-data .order .form-asistencia h4 {
+	display: flex;
+	align-items: center;
+	grid-gap: 8px;
+	width: 100%;
+	font-size: 16px;
+	font-weight: 600;
+	color: var(--dark);
+	margin-bottom: 2px;
+}
+#content main .table-data .order .form-asistencia h4 .bx {
+	font-size: 22px;
+	color: var(--blue);
+}
+#content main .table-data .order .form-asistencia input[type="text"],
+#content main .table-data .order .form-asistencia select {
+	flex: 1 1 170px;
+	height: 44px;
+	padding: 0 16px;
+	border: 1px solid transparent;
+	border-radius: 12px;
+	background: var(--light);
+	color: var(--dark);
+	font-family: var(--poppins);
+	font-size: 14px;
+	outline: none;
+	transition: border-color .2s ease, box-shadow .2s ease;
+}
+#content main .table-data .order .form-asistencia input[type="text"]::placeholder {
+	color: var(--dark-grey);
+}
+#content main .table-data .order .form-asistencia input[type="text"]:focus,
+#content main .table-data .order .form-asistencia select:focus {
+	border-color: var(--blue);
+	box-shadow: 0 0 0 3px rgba(60, 145, 230, .15);
+}
+
+/* Botones principales del formulario */
+#content main .btn-primario {
+	height: 44px;
+	padding: 0 22px;
+	border: none;
+	border-radius: 36px;
+	background: var(--blue);
+	color: #fff;
+	font-family: var(--poppins);
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	grid-gap: 8px;
+	box-shadow: 0 6px 14px rgba(60, 145, 230, .28);
+	transition: transform .2s ease, box-shadow .2s ease;
+}
+#content main .btn-primario:hover {
+	transform: translateY(-1px);
+	box-shadow: 0 8px 18px rgba(60, 145, 230, .36);
+}
+#content main .btn-secundario {
+	height: 44px;
+	padding: 0 22px;
+	border: 1px solid var(--dark-grey);
+	border-radius: 36px;
+	background: transparent;
+	color: var(--dark);
+	font-family: var(--poppins);
+	font-size: 14px;
+	font-weight: 500;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	grid-gap: 8px;
+	transition: background .2s ease;
+}
+#content main .btn-secundario:hover {
+	background: var(--light);
+}
+
+/* Tabla */
+#content main .table-data .order table th {
+	padding-bottom: 14px;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: .04em;
+	text-transform: uppercase;
+	color: var(--dark-grey);
+	border-bottom: 1px solid var(--grey);
+	font-family: var(--lato);
+}
+#content main .table-data .order table td {
+	padding: 16px 0;
+	vertical-align: middle;
+}
+#content main .table-data .order table td.celda-nombre .bx {
+	font-size: 34px;
+	color: var(--blue);
+}
+#content main .table-data .order table td.celda-nombre p {
+	font-weight: 500;
+}
+#content main .table-data .order table td .status {
+	display: inline-block;
+	font-size: 11px;
+	padding: 7px 16px;
+	border-radius: 20px;
+	letter-spacing: .02em;
+}
+
+/* Acciones por fila */
+#content main .table-data .order table td .acciones {
+	display: flex;
+	align-items: center;
+	grid-gap: 8px;
+	flex-wrap: wrap;
+}
+#content main .table-data .order table td .acciones form {
+	display: inline-flex;
+	margin: 0;
+}
+#content main .btn-accion {
+	border: none;
+	border-radius: 36px;
+	padding: 8px 14px;
+	font-family: var(--lato);
+	font-size: 12px;
+	font-weight: 700;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	grid-gap: 6px;
+	text-decoration: none;
+	white-space: nowrap;
+	transition: transform .15s ease, filter .15s ease;
+}
+#content main .btn-accion .bx {
+	font-size: 16px;
+}
+#content main .btn-accion:hover {
+	transform: translateY(-1px);
+	filter: brightness(.95);
+}
+#content main .btn-estado {
+	background: var(--light-blue);
+	color: var(--blue);
+}
+#content main .btn-editar {
+	background: var(--light-yellow);
+	color: #9a7400;
+}
+#content main .btn-eliminar {
+	background: var(--light-orange);
+	color: var(--red);
+}
+
+/* Estado vacío */
+#content main .table-data .order table td.vacio {
+	text-align: center;
+	justify-content: center;
+	color: var(--dark-grey);
+	padding: 40px 0;
+	font-size: 14px;
+}
+
+/* Responsive */
+@media screen and (max-width: 576px) {
+	#content main .table-data .order .form-asistencia input[type="text"],
+	#content main .table-data .order .form-asistencia select,
+	#content main .btn-primario,
+	#content main .btn-secundario {
+		flex: 1 1 100%;
+		width: 100%;
+		justify-content: center;
+	}
+}

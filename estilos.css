@@ -3,3 +3,6 @@ body { font-family: system-ui, sans-serif; background: #f2f4f8; display: flex; j
 .caja input { width: 100%; padding: .7rem; margin-bottom: .8rem; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
 .caja button { width: 100%; padding: .7rem; background: #2563eb; color: #fff; border: 0; border-radius: 6px; cursor: pointer; }
 .error { color: #b91c1c; } .ok { color: #15803d; }
+.divisor { display: flex; align-items: center; gap: .6rem; color: #94a3b8; font-size: .85rem; margin: 1rem 0 .6rem; text-transform: uppercase; }
+.divisor::before, .divisor::after { content: ""; flex: 1; height: 1px; background: #e2e8f0; }
+#google-btn { display: flex; justify-content: center; }
