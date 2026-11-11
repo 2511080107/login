@@ -89,5 +89,7 @@ if ($usuario) {
 session_regenerate_id(true);
 $_SESSION['usuario_id'] = $id;
 $_SESSION['nombre']     = $nombre;
+$_SESSION['email']      = $email;
+$_SESSION['foto']       = $data['picture'] ?? ('https://www.gravatar.com/avatar/' . md5(strtolower(trim($email))) . '?d=identicon&s=64');
 
 echo json_encode(['ok' => true, 'redirect' => 'panel.php']);

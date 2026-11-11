@@ -6,6 +6,7 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 
 require 'db.php';
+require 'config.php';
 
 // Asegura que exista la tabla de asistencia
 $pdo->exec("CREATE TABLE IF NOT EXISTS asistencias (
@@ -17,10 +18,40 @@ $pdo->exec("CREATE TABLE IF NOT EXISTS asistencias (
     actualizado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 )");
 
+// ============================================================
+// Usuario en sesión y permisos
+// ============================================================
+$emailActual  = $_SESSION['email'] ?? '';
+$nombreActual = $_SESSION['nombre'] ?? 'Usuario';
+
+if ($emailActual === '') {
+    $stmt = $pdo->prepare('SELECT email, nombre FROM usuarios WHERE id = ?');
+    $stmt->execute([$_SESSION['usuario_id']]);
+    $usuarioSesion = $stmt->fetch();
+    if ($usuarioSesion) {
+        $emailActual  = $usuarioSesion['email'];
+        $nombreActual = $usuarioSesion['nombre'] ?: $nombreActual;
+    }
+}
+
+// Solo el correo definido en config.php puede modificar la asistencia
+$esAdmin = strcasecmp(trim($emailActual), ADMIN_EMAIL) === 0;
+
+// Foto para el nav (Google o avatar generado por correo)
+$fotoActual = $_SESSION['foto'] ?? '';
+if ($fotoActual === '') {
+    $fotoActual = 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($emailActual))) . '?d=identicon&s=64';
+}
+
 $msg = '';
 $msgTipo = 'ok';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$esAdmin) {
+    $msg = 'Solo el administrador puede modificar la asistencia.';
+    $msgTipo = 'error';
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $esAdmin) {
     $accion = $_POST['accion'] ?? '';
 
     try {
@@ -101,9 +132,9 @@ if ($msg === '' && isset($_GET['msg'], $mensajes[$_GET['msg']])) {
     $msg = $mensajes[$_GET['msg']];
 }
 
-// Usuario en edición
+// Usuario en edición (solo administrador)
 $editar = null;
-if (isset($_GET['editar'])) {
+if ($esAdmin && isset($_GET['editar'])) {
     $stmt = $pdo->prepare('SELECT * FROM asistencias WHERE id = ?');
     $stmt->execute([(int) $_GET['editar']]);
     $editar = $stmt->fetch() ?: null;
@@ -208,7 +239,7 @@ $ausentes = $total - $presentes;
                 <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
             </div>
         </form>
-        <p>Bienvenido Leandro!!</p>
+        <p class="nav-user">Bienvenido, <?= htmlspecialchars($nombreActual) ?><?php if ($esAdmin): ?> <span class="rol-admin">Admin</span><?php endif; ?></p>
 
         <input type="checkbox" class="checkbox" id="switch-mode" hidden />
         <label class="swith-lm" for="switch-mode">
@@ -235,7 +266,7 @@ $ausentes = $total - $presentes;
 
         <!-- Profile Menu -->
         <a href="#" class="profile" id="profileIcon">
-            <img src="https://i.pinimg.com/736x/00/85/74/00857465e2b58544ae4039883a1b3ee0.jpg" alt="Profile">
+            <img src="<?= htmlspecialchars($fotoActual) ?>" alt="<?= htmlspecialchars($nombreActual) ?>">
         </a>
         <div class="profile-menu" id="profileMenu">
             <ul>
@@ -301,7 +332,9 @@ $ausentes = $total - $presentes;
 						<p class="alerta <?= $msgTipo === 'error' ? 'alerta-error' : 'alerta-ok' ?>"><?= htmlspecialchars($msg) ?></p>
 					<?php endif; ?>
 
-					<?php if ($editar): ?>
+					<?php if (!$esAdmin): ?>
+						<p class="alerta alerta-error"><i class='bx bx-lock-alt'></i> Solo el administrador puede agregar, editar o eliminar registros.</p>
+					<?php elseif ($editar): ?>
 						<form method="post" class="form-asistencia">
 							<h4><i class='bx bx-edit'></i> Editar usuario #<?= (int) $editar['id'] ?></h4>
 							<input type="hidden" name="accion" value="actualizar">
@@ -330,13 +363,13 @@ $ausentes = $total - $presentes;
 							<tr>
 								<th>Apellidos y nombres</th>
 								<th>Estado</th>
-								<th>Acciones</th>
+								<?php if ($esAdmin): ?><th>Acciones</th><?php endif; ?>
 							</tr>
 						</thead>
 						<tbody>
 							<?php if (!$asistencias): ?>
 								<tr>
-									<td colspan="3" class="vacio">No hay usuarios registrados todavía.</td>
+									<td colspan="<?= $esAdmin ? 3 : 2 ?>" class="vacio">No hay usuarios registrados todavía.</td>
 								</tr>
 							<?php else: ?>
 								<?php foreach ($asistencias as $a): ?>
@@ -350,6 +383,7 @@ $ausentes = $total - $presentes;
 												<?= $a['estado'] === 'presente' ? 'Presente' : 'Ausente' ?>
 											</span>
 										</td>
+										<?php if ($esAdmin): ?>
 										<td>
 											<div class="acciones">
 												<form method="post">
@@ -369,6 +403,7 @@ $ausentes = $total - $presentes;
 												</form>
 											</div>
 										</td>
+										<?php endif; ?>
 									</tr>
 								<?php endforeach; ?>
 							<?php endif; ?>

@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $pass  = $_POST['password'] ?? '';
 
-    $stmt = $pdo->prepare('SELECT id, nombre, password FROM usuarios WHERE email = ?');
+    $stmt = $pdo->prepare('SELECT id, nombre, email, password FROM usuarios WHERE email = ?');
     $stmt->execute([$email]);
     $usuario = $stmt->fetch();
 
@@ -22,6 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         session_regenerate_id(true); // evita fijación de sesión
         $_SESSION['usuario_id'] = $usuario['id'];
         $_SESSION['nombre']     = $usuario['nombre'];
+        $_SESSION['email']      = $usuario['email'];
+        $_SESSION['foto']       = 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($usuario['email']))) . '?d=identicon&s=64';
         header('Location: panel.php');
         exit;
     }
